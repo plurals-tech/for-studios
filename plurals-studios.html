@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLURALS TECH — For Game Providers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#06060f;--bg2:#09091a;--surface:#0f0f20;--panel:#131328;--raised:#1a1a35;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.11);--border3:rgba(255,255,255,0.18);
+  --white:#ffffff;--off:#e4e4f0;--mid:#9898b8;--dim:#55556a;--muted:#3a3a55;
+  --accent:#6b5eff;--accent2:#8b7fff;--accent-dim:rgba(107,94,255,0.1);--accent-glow:rgba(107,94,255,0.22);
+  --teal:#00d4b1;--teal-dim:rgba(0,212,177,0.1);
+  --gold:#f0a30a;--gold-dim:rgba(240,163,10,0.1);
+  --rose:#f43f5e;--rose-dim:rgba(244,63,94,0.1);
+  --emerald:#10b981;--emerald-dim:rgba(16,185,129,0.1);
+  --fd:'Syne',sans-serif;--fb:'Instrument Sans',sans-serif;
+  --fm:'DM Mono',monospace;--fi:'Instrument Serif',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--off);font-family:var(--fb);font-size:16px;line-height:1.65;overflow-x:hidden}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.5}
+
+/* ════ TYPE ════ */
+h1,h2,h3,h4{font-family:var(--fd);font-weight:700;letter-spacing:-.03em;color:var(--white);line-height:1.02}
+h1{font-size:clamp(44px,5.5vw,80px)}
+h2{font-size:clamp(30px,4vw,52px)}
+h3{font-size:clamp(19px,2.2vw,27px)}
+h4{font-size:16px;line-height:1.35;font-weight:600}
+.label{display:inline-flex;align-items:center;gap:10px;font-family:var(--fb);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+.label::before{content:'';width:24px;height:1px;background:var(--teal)}
+.body-xl{font-size:18px;font-weight:300;color:var(--mid);line-height:1.65}
+.body-lg{font-size:15px;font-weight:300;color:var(--mid);line-height:1.7}
+em.serif{font-family:var(--fi);font-style:italic;color:var(--white)}
+.teal-col{color:var(--teal)}.accent-col{color:var(--accent2)}.gold-col{color:var(--gold)}.rose-col{color:var(--rose)}
+
+/* ════ LAYOUT ════ */
+.wrap{max-width:1100px;margin:0 auto;padding:0 40px}
+.section{padding:112px 0}.section-sm{padding:72px 0}
+.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border2) 30%,var(--border2) 70%,transparent)}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* ════ BUTTONS ════ */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:10px;font-family:var(--fb);font-size:14px;font-weight:500;text-decoration:none;cursor:pointer;border:none;letter-spacing:.01em;transition:all .2s;white-space:nowrap}
+.btn-teal{background:var(--teal);color:#000;font-weight:600;box-shadow:0 0 28px var(--teal-dim)}
+.btn-teal:hover{background:#00edc5;transform:translateY(-2px)}
+.btn-primary{background:var(--accent);color:var(--white);box-shadow:0 0 36px var(--accent-glow)}
+.btn-primary:hover{background:#7c6fff;transform:translateY(-2px)}
+.btn-outline{background:transparent;color:var(--off);border:1px solid var(--border2)}
+.btn-outline:hover{border-color:var(--border3);background:rgba(255,255,255,.04)}
+.btn-ghost-teal{background:transparent;color:var(--teal);border:1px solid rgba(0,212,177,.25)}
+.btn-ghost-teal:hover{background:rgba(0,212,177,.06);border-color:rgba(0,212,177,.4)}
+.btn-lg{padding:16px 36px;font-size:16px}
+.btn-sm{padding:9px 18px;font-size:13px}
+
+/* ════ NAV ════ */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:18px 48px;background:rgba(6,6,15,.9);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);transition:padding .3s}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.nav-logo-type{font-family:var(--fd);font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--white);text-transform:uppercase}
+.nav-badge{background:rgba(0,212,177,.12);border:1px solid rgba(0,212,177,.28);color:var(--teal);font-size:10px;font-weight:600;letter-spacing:.08em;padding:3px 10px;border-radius:100px;text-transform:uppercase}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-back{font-size:12.5px;color:var(--mid);text-decoration:none;transition:color .2s;display:flex;align-items:center;gap:6px}
+.nav-back:hover{color:var(--white)}
+
+/* ════ HERO ════ */
+#hero{min-height:100vh;display:flex;align-items:center;padding-top:90px;position:relative;overflow:hidden;text-align:center}
+.hero-glow-teal{position:absolute;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,rgba(0,212,177,.07) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.hero-kicker{display:inline-flex;align-items:center;gap:8px;background:rgba(0,212,177,.1);border:1px solid rgba(0,212,177,.25);border-radius:100px;padding:6px 18px 6px 10px;font-size:12px;font-weight:500;color:var(--teal);margin-bottom:32px}
+.hero-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-h1{margin-bottom:24px}
+.hero-sub{max-width:580px;margin:0 auto 40px;font-size:18px;font-weight:300;color:var(--mid);line-height:1.65}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:72px}
+
+.hero-reality-bar{max-width:880px;margin:0 auto;background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:36px 48px;display:grid;grid-template-columns:repeat(3,1fr);gap:0;position:relative;overflow:hidden}
+.hero-reality-bar::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(0,212,177,.05) 0%,transparent 70%);pointer-events:none}
+.hrb-item{text-align:center;padding:0 24px;position:relative}
+.hrb-item:not(:last-child)::after{content:'';position:absolute;right:0;top:10%;bottom:10%;width:1px;background:var(--border2)}
+.hrb-num{font-family:var(--fd);font-size:clamp(26px,4vw,44px);font-weight:800;letter-spacing:-.05em;color:var(--white);display:block;margin-bottom:6px;line-height:1}
+.hrb-rose{color:var(--rose)}.hrb-gold{color:var(--gold)}.hrb-teal{color:var(--teal)}
+.hrb-label{font-size:13px;color:var(--mid);line-height:1.4}
+.hrb-source{font-size:10px;color:var(--dim);margin-top:6px;font-style:italic}
+
+/* ════ PULL QUOTE ════ */
+.pull-block{max-width:760px;margin:0 auto;text-align:center}
+.pull-quote{font-family:var(--fi);font-size:clamp(22px,3vw,38px);font-style:italic;color:var(--white);line-height:1.22;letter-spacing:-.02em;margin-bottom:16px}
+.pull-attr{font-size:12px;color:var(--dim);letter-spacing:.04em}
+.pull-attr span{color:var(--teal)}
+
+/* LinkedIn callout */
+.linkedin-callout{max-width:680px;margin:0 auto;background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:32px 36px;position:relative;overflow:hidden}
+.linkedin-callout::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#0077b5,rgba(0,119,181,.3))}
+.lc-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.lc-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#0077b5,#005885);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.lc-name{font-family:var(--fd);font-size:14px;font-weight:700;color:var(--white)}
+.lc-title{font-size:11px;color:var(--mid);margin-top:2px}
+.lc-source{font-size:10px;color:var(--dim);margin-top:2px;font-family:var(--fm)}
+.lc-text{font-size:14px;color:var(--mid);line-height:1.65}
+.lc-highlight{background:rgba(0,212,177,.1);border:1px solid rgba(0,212,177,.2);border-radius:8px;padding:14px 16px;margin-top:16px}
+.lc-highlight-text{font-size:13px;color:var(--off);line-height:1.6;font-style:italic}
+.lc-tags{margin-top:12px;font-size:11px;color:var(--accent2)}
+
+/* ════ PROBLEM CARDS ════ */
+.problem-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.problem-grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.prob-card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:28px 24px;transition:all .3s;position:relative;overflow:hidden}
+.prob-card:hover{transform:translateY(-3px);border-color:var(--border2)}
+.prob-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .3s}
+.prob-card:hover::before{opacity:1}
+.pc-rose::before{background:linear-gradient(90deg,var(--rose),transparent)}
+.pc-gold::before{background:linear-gradient(90deg,var(--gold),transparent)}
+.pc-teal::before{background:linear-gradient(90deg,var(--teal),transparent)}
+.pc-accent::before{background:linear-gradient(90deg,var(--accent),transparent)}
+.prob-who{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px;padding:3px 8px;border-radius:4px;display:inline-block}
+.pw-rose{color:var(--rose);background:var(--rose-dim)}
+.pw-gold{color:var(--gold);background:var(--gold-dim)}
+.pw-teal{color:var(--teal);background:var(--teal-dim)}
+.pw-accent{color:var(--accent2);background:var(--accent-dim)}
+.prob-stat-big{font-family:var(--fd);font-size:clamp(28px,4vw,46px);font-weight:800;letter-spacing:-.05em;display:block;margin-bottom:8px;line-height:1}
+.prob-card h4{margin-bottom:8px;font-size:16px}
+.prob-card p{font-size:13px;color:var(--mid);line-height:1.65}
+
+/* ════ CHANNELS THAT FAIL ════ */
+.fail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:48px}
+.fail-card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:26px 22px;transition:all .3s}
+.fail-card:hover{transform:translateY(-3px);border-color:var(--border2)}
+.fail-tag{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--rose);background:var(--rose-dim);border-radius:4px;padding:3px 8px;display:inline-block;margin-bottom:14px}
+.fail-name{font-family:var(--fd);font-size:16px;font-weight:700;margin-bottom:10px}
+.fail-why{font-size:13px;color:var(--mid);line-height:1.6;margin-bottom:12px}
+.fail-items{display:flex;flex-direction:column;gap:5px;padding-top:12px;border-top:1px solid var(--border)}
+.fail-item{font-size:12px;color:var(--mid);display:flex;gap:7px;align-items:flex-start}
+.fail-item::before{content:'✕';color:var(--rose);flex-shrink:0;font-size:10px;margin-top:2px;font-weight:700}
+
+/* ════ SOLUTION REVEAL ════ */
+.solution-layout{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+
+/* TikTok vs PLURALS comparison */
+.platform-compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px}
+.plat-card{border-radius:14px;padding:24px;position:relative;overflow:hidden}
+.plat-dead{background:var(--panel);border:1px solid rgba(244,63,94,.15)}
+.plat-alive{background:linear-gradient(135deg,rgba(0,212,177,.1),rgba(0,212,177,.02));border:1px solid rgba(0,212,177,.25)}
+.plat-badge{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:100px;display:inline-block;margin-bottom:14px}
+.pb-dead{background:var(--rose-dim);color:var(--rose)}
+.pb-alive{background:var(--teal-dim);color:var(--teal)}
+.plat-card h4{font-size:15px;margin-bottom:10px}
+.plat-items{display:flex;flex-direction:column;gap:6px}
+.plat-item{font-size:12px;color:var(--mid);display:flex;gap:7px;align-items:flex-start}
+.plat-item.bad::before{content:'✕';color:var(--rose);flex-shrink:0;font-size:10px;margin-top:2px;font-weight:700}
+.plat-item.good::before{content:'✓';color:var(--teal);flex-shrink:0;font-size:10px;margin-top:2px;font-weight:700}
+
+/* ════ PRE-LAUNCH VALIDATION ════ */
+.validation-layout{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.music-analogy{background:linear-gradient(135deg,rgba(107,94,255,.1),rgba(107,94,255,.02));border:1px solid rgba(107,94,255,.2);border-radius:18px;padding:32px}
+.ma-label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2);margin-bottom:20px;display:block}
+.ma-flow{display:flex;flex-direction:column;gap:0}
+.ma-step{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px solid rgba(107,94,255,.1)}
+.ma-step:last-child{border-bottom:none;padding-bottom:0}
+.ma-icon{font-size:20px;flex-shrink:0;width:28px;margin-top:2px}
+.ma-body{}
+.ma-title{font-family:var(--fd);font-size:13px;font-weight:700;margin-bottom:4px}
+.ma-desc{font-size:12px;color:var(--mid);line-height:1.5}
+.ma-outcome{margin-top:16px;padding-top:16px;border-top:1px solid rgba(107,94,255,.15);text-align:center}
+.ma-outcome-num{font-family:var(--fd);font-size:32px;font-weight:800;color:var(--accent2);display:block;letter-spacing:-.04em}
+.ma-outcome-label{font-size:12px;color:var(--mid)}
+
+/* ════ AI INSIGHTS ════ */
+.ai-layout{display:grid;grid-template-columns:1fr 1.2fr;gap:64px;align-items:center}
+.ai-screen{background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden}
+.ai-screen-bar{background:var(--panel);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:7px}
+.dot{width:8px;height:8px;border-radius:50%}
+.ai-screen-title{font-size:10px;color:var(--dim);margin-left:8px;font-family:var(--fd);font-weight:600;letter-spacing:.05em;flex:1}
+.ai-body{padding:18px}
+.ai-kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.ai-kpi{background:var(--panel);border:1px solid var(--border);border-radius:9px;padding:12px;text-align:center}
+.ai-kpi-num{font-family:var(--fd);font-size:16px;font-weight:800;display:block;margin-bottom:2px}
+.ai-kpi-label{font-size:9px;color:var(--dim)}
+.ai-insight-card{background:linear-gradient(135deg,rgba(0,212,177,.1),rgba(0,212,177,.02));border:1px solid rgba(0,212,177,.2);border-radius:10px;padding:14px;margin-bottom:10px}
+.ai-insight-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.ai-insight-dot{width:6px;height:6px;border-radius:50%;background:var(--teal)}
+.ai-insight-title{font-family:var(--fd);font-size:11px;font-weight:700;color:var(--teal)}
+.ai-insight-text{font-size:11px;color:var(--mid);line-height:1.5}
+.ai-theme-row{display:flex;gap:6px;flex-wrap:wrap}
+.ai-theme{font-size:10px;padding:4px 9px;border-radius:100px;background:var(--raised);color:var(--mid);border:1px solid var(--border);font-family:var(--fd);font-weight:600}
+.ai-theme.hot{background:rgba(0,212,177,.12);color:var(--teal);border-color:rgba(0,212,177,.2)}
+.ai-trend-chart{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px}
+.ai-chart-title{font-size:9px;color:var(--mid);font-family:var(--fd);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.ai-bars{display:flex;align-items:flex-end;gap:3px;height:48px}
+.ai-bar{flex:1;border-radius:2px 2px 0 0;min-width:0}
+.ab-t{background:linear-gradient(0deg,var(--teal),rgba(0,212,177,.3))}
+.ab-a{background:linear-gradient(0deg,var(--accent),rgba(107,94,255,.3))}
+.ab-g{background:linear-gradient(0deg,var(--gold),rgba(240,163,10,.3))}
+
+/* ════ VALUE CARDS ════ */
+.value-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.value-card{background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:30px 26px;transition:all .3s;overflow:hidden;position:relative}
+.value-card:hover{transform:translateY(-4px);border-color:var(--border2)}
+.value-card.teal-feat{background:linear-gradient(135deg,rgba(0,212,177,.1),rgba(0,212,177,.02));border-color:rgba(0,212,177,.22)}
+.value-card.teal-feat:hover{border-color:rgba(0,212,177,.4)}
+.vc-icon{font-size:28px;margin-bottom:16px;display:block}
+.vc-title{font-family:var(--fd);font-size:17px;font-weight:700;margin-bottom:9px}
+.vc-desc{font-size:13px;color:var(--mid);line-height:1.65}
+.vc-metric{margin-top:16px;background:var(--raised);border-radius:9px;padding:12px;text-align:center}
+.vc-num{font-family:var(--fd);font-size:24px;font-weight:800;letter-spacing:-.04em;display:block;margin-bottom:2px;color:var(--white)}
+.vc-label{font-size:10px;color:var(--dim)}
+
+/* ════ REVENUE SCENARIOS ════ */
+.scenario-layout{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:48px}
+.scenario-card{border-radius:18px;padding:32px;position:relative;overflow:hidden}
+.sc-baseline{background:var(--panel);border:1px solid var(--border)}
+.sc-plurals{background:linear-gradient(135deg,rgba(0,212,177,.12),rgba(0,212,177,.03));border:1px solid rgba(0,212,177,.28)}
+.sc-badge{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;display:inline-block;margin-bottom:20px;font-family:var(--fd)}
+.scb-base{background:var(--raised);color:var(--mid)}
+.scb-plus{background:rgba(0,212,177,.15);color:var(--teal)}
+.sc-title{font-family:var(--fd);font-size:20px;font-weight:700;margin-bottom:16px}
+.sc-metrics{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.sc-metric{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--border)}
+.sc-metric:last-child{border-bottom:none}
+.sc-metric-label{font-size:13px;color:var(--mid)}
+.sc-metric-val{font-family:var(--fd);font-size:18px;font-weight:800;letter-spacing:-.03em}
+.sc-highlight{background:var(--raised);border-radius:12px;padding:18px;text-align:center}
+.sc-highlight.teal{background:rgba(0,212,177,.12);border:1px solid rgba(0,212,177,.2)}
+.sc-highlight-num{font-family:var(--fd);font-size:36px;font-weight:800;letter-spacing:-.05em;display:block;margin-bottom:4px;color:var(--white)}
+.sc-highlight.teal .sc-highlight-num{color:var(--teal)}
+.sc-highlight-label{font-size:11px;color:var(--dim)}
+.sc-uplift{position:absolute;top:20px;right:20px;background:rgba(0,212,177,.2);color:var(--teal);font-family:var(--fd);font-size:12px;font-weight:700;padding:6px 12px;border-radius:100px}
+
+/* ════ WORKFLOW CJM ════ */
+.workflow-steps{display:flex;flex-direction:column;gap:0;position:relative}
+.workflow-steps::before{content:'';position:absolute;left:28px;top:28px;bottom:28px;width:1px;background:linear-gradient(180deg,var(--teal) 0%,var(--accent) 60%,rgba(0,212,177,.1) 100%)}
+.ws-step{display:flex;gap:32px;align-items:flex-start}
+.ws-step:not(:last-child){padding-bottom:48px}
+.ws-marker{width:56px;height:56px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:16px;font-weight:800;position:relative;z-index:1}
+.wsm-1{background:linear-gradient(135deg,#0f766e,#14b8a6);box-shadow:0 0 20px rgba(0,212,177,.35)}
+.wsm-2{background:linear-gradient(135deg,#7c3aed,#6d28d9);box-shadow:0 0 20px rgba(107,94,255,.35)}
+.wsm-3{background:linear-gradient(135deg,#b45309,#d97706);box-shadow:0 0 20px rgba(240,163,10,.28)}
+.wsm-4{background:linear-gradient(135deg,#0f766e,#7c3aed);box-shadow:0 0 20px rgba(0,212,177,.28)}
+.wsm-5{background:linear-gradient(135deg,#059669,#10b981);box-shadow:0 0 20px rgba(16,185,129,.28)}
+.wsm-6{background:linear-gradient(135deg,#7c3aed,#0f766e);box-shadow:0 0 20px rgba(107,94,255,.28)}
+.wsm-7{background:linear-gradient(135deg,#f0a30a,#f59e0b);box-shadow:0 0 20px rgba(240,163,10,.28)}
+.ws-body{flex:1;padding-top:12px}
+.ws-tag{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:7px;display:block}
+.ws-step h3{font-size:19px;margin-bottom:9px}
+.ws-step p{font-size:13px;color:var(--mid);line-height:1.65}
+.ws-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px}
+.ws-chip{font-size:10px;padding:3px 9px;border-radius:100px;background:var(--raised);color:var(--mid);border:1px solid var(--border)}
+.ws-time{font-size:10px;color:var(--dim);font-family:var(--fm);margin-top:8px;letter-spacing:.04em}
+
+/* ════ STUDIO DASHBOARD ════ */
+.studio-dash-full{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden}
+.sdf-bar{background:var(--panel);border-bottom:1px solid var(--border);padding:11px 18px;display:flex;align-items:center;gap:8px}
+.sdf-title{font-size:10px;color:var(--dim);margin-left:8px;font-family:var(--fd);font-weight:600;letter-spacing:.05em;flex:1}
+.sdf-date{font-size:9px;color:var(--dim);font-family:var(--fm)}
+.sdf-body{padding:20px}
+.sdf-kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}
+.skpi{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:13px;text-align:center}
+.skpi-num{font-family:var(--fd);font-size:17px;font-weight:800;display:block;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.skpi-label{font-size:9px;color:var(--dim);line-height:1.3}
+.skpi-change{font-size:9px;font-family:var(--fm);margin-top:3px}
+.sk-up{color:var(--teal)}.sk-gold{color:var(--gold)}.sk-acc{color:var(--accent2)}.sk-rose{color:var(--rose)}.sk-em{color:var(--emerald)}
+.sdf-row2{display:grid;grid-template-columns:1.6fr 1fr;gap:12px;margin-bottom:14px}
+.sdf-chart{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px}
+.sdf-chart-title{font-size:9px;color:var(--mid);font-family:var(--fd);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px}
+.sdf-bars{display:flex;align-items:flex-end;gap:4px;height:64px}
+.sdf-bar-g{flex:1;border-radius:2px 2px 0 0;min-width:0;background:linear-gradient(0deg,var(--teal),rgba(0,212,177,.3));opacity:.75}
+.sdf-bar-g2{flex:1;border-radius:2px 2px 0 0;min-width:0;background:linear-gradient(0deg,var(--accent),rgba(107,94,255,.3));opacity:.6}
+.sdf-insight-col{background:var(--panel);border:1px solid rgba(0,212,177,.15);border-radius:10px;padding:14px}
+.sdf-insight-title{font-size:9px;color:var(--teal);font-family:var(--fd);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.sdf-insight-item{display:flex;gap:8px;margin-bottom:8px;align-items:flex-start}
+.sdf-insight-icon{font-size:12px;flex-shrink:0;width:16px}
+.sdf-insight-text{font-size:10px;color:var(--mid);line-height:1.45}
+.sdf-insight-text strong{color:var(--off);font-weight:500}
+.sdf-row3{display:grid;grid-template-columns:1fr 1.5fr;gap:12px}
+.sdf-funnel{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px}
+.sdf-games{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px;overflow:hidden}
+.sdf-fn-title{font-size:9px;color:var(--mid);font-family:var(--fd);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px}
+.fn-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.fn-icon{font-size:11px;width:16px;flex-shrink:0}
+.fn-track{flex:1;height:6px;background:var(--raised);border-radius:3px;overflow:hidden}
+.fn-fill{height:100%;border-radius:3px}
+.fn-val{font-size:10px;color:var(--off);font-family:var(--fm);width:38px;text-align:right;flex-shrink:0}
+.fn-pct{font-size:9px;color:var(--dim);width:28px;flex-shrink:0}
+.game-row{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr;gap:4px;padding:6px 0;border-bottom:1px solid var(--border);align-items:center}
+.game-row:last-child{border-bottom:none}
+.game-row.hdr{padding-bottom:5px}
+.g-cell{font-size:10px;color:var(--mid);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.game-row.hdr .g-cell{font-family:var(--fm);font-size:8.5px;color:var(--dim);letter-spacing:.06em;text-transform:uppercase}
+.g-name-wrap{display:flex;align-items:center;gap:6px}
+.g-thumb{width:22px;height:22px;border-radius:5px;background:var(--raised);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.g-val{font-family:var(--fm);font-size:10px;color:var(--off)}.g-up{color:var(--teal)}.g-gold{color:var(--gold)}.g-mid{color:var(--mid)}
+
+/* ════ PRICING ════ */
+.pricing-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:52px;align-items:start}
+.pc{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:34px 28px;transition:all .3s;display:flex;flex-direction:column;position:relative}
+.pc:hover{transform:translateY(-4px);border-color:var(--border2)}
+.pc.best{background:linear-gradient(160deg,rgba(0,212,177,.12),rgba(0,212,177,.03));border-color:rgba(0,212,177,.3)}
+.pc.best:hover{border-color:rgba(0,212,177,.48)}
+.pc-best-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--teal);color:#000;font-size:11px;font-weight:700;padding:4px 14px;border-radius:100px;white-space:nowrap;letter-spacing:.04em;font-family:var(--fd)}
+.pc-tier{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:14px;display:block}
+.pc-name{font-family:var(--fd);font-size:21px;font-weight:700;margin-bottom:10px}
+.pc-amount{font-family:var(--fd);font-size:38px;font-weight:800;letter-spacing:-.05em;color:var(--white);display:block;line-height:1;margin-bottom:4px}
+.pc-suffix{font-size:13px;color:var(--mid);margin-bottom:16px;display:block}
+.pc-desc{font-size:13px;color:var(--mid);line-height:1.6;margin-bottom:18px;flex:1}
+.pc-feats{display:flex;flex-direction:column;gap:7px;margin-bottom:22px}
+.pc-feat{font-size:12.5px;color:var(--off);display:flex;gap:7px;align-items:flex-start}
+.pc-feat::before{content:'✓';color:var(--teal);flex-shrink:0;font-weight:700;font-size:11px;margin-top:2px}
+.pc-note{font-size:11px;color:var(--dim);text-align:center;margin-top:10px;font-style:italic}
+
+/* ════ COMPARE TABLE ════ */
+.ct{width:100%;border-collapse:collapse;margin-top:48px}
+.ct th{font-family:var(--fd);font-size:13px;font-weight:700;padding:15px 18px;text-align:left;background:var(--panel);border:1px solid var(--border);color:var(--white)}
+.ct th:last-child{background:linear-gradient(135deg,rgba(0,212,177,.16),rgba(0,212,177,.06));border-color:rgba(0,212,177,.28);color:var(--teal)}
+.ct td{font-size:13px;padding:12px 18px;border:1px solid var(--border);color:var(--mid);vertical-align:middle}
+.ct tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.ct td:last-child{background:rgba(0,212,177,.03);border-color:rgba(0,212,177,.12);color:var(--off)}
+.ct-feat{font-weight:500;color:var(--off)}
+.ct-yes{color:var(--teal);font-weight:600;font-size:14px}
+.ct-no{color:var(--rose);font-size:14px}
+.ct-part{color:var(--gold);font-size:12px}
+
+/* ════ AUTHORITY ════ */
+.auth-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:48px}
+.auth-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px 18px;text-align:center;transition:all .3s}
+.auth-card:hover{border-color:var(--border2);transform:translateY(-3px)}
+.auth-stat{font-family:var(--fd);font-size:28px;font-weight:800;letter-spacing:-.04em;color:var(--white);display:block;margin-bottom:4px}
+.auth-label{font-size:12px;color:var(--mid);line-height:1.4}
+
+/* ════ FOOTER CTA ════ */
+.footer-cta{text-align:center;max-width:680px;margin:0 auto;position:relative;z-index:1}
+.footer-cta h2{margin-bottom:16px}
+.footer-cta p{font-size:17px;color:var(--mid);margin-bottom:36px;line-height:1.65}
+.fcta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.footer-message{margin-top:36px;font-size:13px;color:var(--dim);line-height:1.6;max-width:460px;margin-left:auto;margin-right:auto}
+.footer-message a{color:var(--teal);text-decoration:none}
+
+/* ════ FOOTER ════ */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:40px 0}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.footer-nav{display:flex;gap:22px;list-style:none;flex-wrap:wrap}
+.footer-nav a{font-size:12.5px;color:var(--dim);text-decoration:none;transition:color .2s}
+.footer-nav a:hover{color:var(--off)}
+.footer-socials{display:flex;gap:10px}
+.social-link{width:34px;height:34px;border-radius:9px;background:var(--panel);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--dim);transition:all .2s;text-decoration:none}
+.social-link:hover{background:var(--raised);border-color:var(--border2);color:var(--off)}
+.footer-copy{font-size:12px;color:var(--muted)}
+
+/* ════ RESPONSIVE ════ */
+@media(max-width:960px){
+  nav{padding:14px 24px}.wrap{padding:0 24px}
+  .section{padding:72px 0}
+  .hero-reality-bar{padding:24px;grid-template-columns:1fr}
+  .hrb-item:not(:last-child)::after{display:none}
+  .problem-grid-3,.problem-grid-2,.fail-grid,.value-grid-3,.pricing-cards,.auth-grid,.scenario-layout{grid-template-columns:1fr}
+  .solution-layout,.validation-layout,.ai-layout{grid-template-columns:1fr}
+  .platform-compare{grid-template-columns:1fr}
+  .sdf-kpi-row{grid-template-columns:repeat(3,1fr)}
+  .sdf-row2,.sdf-row3{grid-template-columns:1fr}
+  .ct th,.ct td{padding:9px 12px;font-size:12px}
+  h1{font-size:40px}h2{font-size:30px}
+  .footer-inner{flex-direction:column;text-align:center}.footer-nav{justify-content:center}
+  .workflow-steps::before{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav id="nav">
+  <a href="plurals-landing-v3.html" class="nav-logo">
+    <svg width="30" height="30" viewBox="0 0 34 34" fill="none">
+      <circle cx="17" cy="12.5" r="9.5" stroke="rgba(255,255,255,0.65)" stroke-width="1.2" fill="none"/>
+      <circle cx="11.5" cy="22.5" r="9.5" stroke="rgba(255,255,255,0.65)" stroke-width="1.2" fill="none"/>
+      <circle cx="22.5" cy="22.5" r="9.5" stroke="rgba(255,255,255,0.65)" stroke-width="1.2" fill="none"/>
+      <circle cx="17" cy="19.4" r="1.3" fill="rgba(255,255,255,0.6)"/>
+    </svg>
+    <span class="nav-logo-type">PLURALS TECH</span>
+    <span class="nav-badge">For Studios</span>
+  </a>
+  <div class="nav-right">
+    <a href="plurals-landing-v3.html" class="nav-back">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13 8H3M7 4L3 8l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to overview
+    </a>
+    <a href="#pricing" class="btn btn-outline btn-sm">See pricing</a>
+    <a href="#final-cta" class="btn btn-teal btn-sm">Get started</a>
+  </div>
+</nav>
+
+
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <div class="hero-glow-teal"></div>
+  <div class="wrap">
+    <div style="position:relative;z-index:1">
+      <div class="hero-kicker">
+        <span class="hero-dot"></span>
+        Built for game studios · The distribution layer iGaming is missing
+      </div>
+      <h1 class="hero-h1">
+        You make great games.<br>
+        <em class="serif">Nobody sees them.</em>
+      </h1>
+      <p class="hero-sub">
+        Thousands of studios. Tens of thousands of releases. Only a handful ever reach meaningful player engagement. The problem isn't your game. It's that no platform was built to take it directly to players — until now.
+      </p>
+      <div class="hero-btns">
+        <a href="#solution" class="btn btn-teal btn-lg">
+          Show me how it works
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#pricing" class="btn btn-outline btn-lg">See pricing</a>
+      </div>
+
+      <!-- Reality bar -->
+      <div class="hero-reality-bar reveal">
+        <div class="hrb-item">
+          <span class="hrb-num hrb-rose">~97%</span>
+          <div class="hrb-label">of new slot releases fail to gain meaningful player traction after launch</div>
+          <div class="hrb-source">iGaming studio performance data · 2025</div>
+        </div>
+        <div class="hrb-item">
+          <span class="hrb-num hrb-gold">0</span>
+          <div class="hrb-label">direct-to-player channels currently available to game studios — all routes go through operators</div>
+          <div class="hrb-source">Industry structural reality · confirmed by studio CEOs</div>
+        </div>
+        <div class="hrb-item">
+          <span class="hrb-num hrb-teal">3–5×</span>
+          <div class="hrb-label">higher operator adoption rate for games with pre-launch player demand signal</div>
+          <div class="hrb-source">PLURALS TECH market analysis · Q1 2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ PART 1: THE PROBLEM ══ -->
+<section id="problem" class="section" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="label reveal">The real problem</div>
+
+    <div class="pull-block reveal" style="margin-top:28px;margin-bottom:64px">
+      <div class="pull-quote">"Content is burned in the furnace. Studios produce, operators decide, players never hear about it."</div>
+      <div class="pull-attr">— Game provider CEO · confirmed insight from industry research · <span>PLURALS TECH, March 2026</span></div>
+    </div>
+
+    <div class="problem-grid-3 reveal">
+      <div class="prob-card pc-rose">
+        <div class="prob-who pw-rose">Distribution</div>
+        <span class="prob-stat-big" style="color:var(--rose)">Zero<span style="font-size:18px;color:var(--mid);font-weight:400"> direct channels</span></span>
+        <h4>All roads go through operators</h4>
+        <p>Studios have no direct relationship with players. Every game enters the market through operator lobbies — where it competes with 3,000–10,000 other titles for the same thumbnail slot. Operators control the entire player relationship: onboarding emails, promotions, featured sections. You have no voice.</p>
+      </div>
+      <div class="prob-card pc-gold">
+        <div class="prob-who pw-gold">Discovery</div>
+        <span class="prob-stat-big" style="color:var(--gold)">4,000+<span style="font-size:18px;color:var(--mid);font-weight:400"> per lobby</span></span>
+        <h4>Your game is a thumbnail</h4>
+        <p>Even when an operator picks up your game, it enters a grid of thousands with zero emotional context. No trailer, no narrative, no social proof. A player's chance of finding your specific title is mathematically negligible — and that's assuming your game made it into the lobby at all.</p>
+      </div>
+      <div class="prob-card pc-accent">
+        <div class="prob-who pw-accent">Brand Building</div>
+        <span class="prob-stat-big" style="color:var(--accent2)">Cold<span style="font-size:18px;color:var(--mid);font-weight:400"> outreach only</span></span>
+        <h4>LinkedIn is B2B. Players aren't on it.</h4>
+        <p>Studios promote on LinkedIn — but LinkedIn is for operator sales, not player demand. Players don't follow studio announcements. They don't read game release news. The channel that matters — direct player attention — doesn't exist yet for game studios.</p>
+      </div>
+    </div>
+
+    <!-- LinkedIn callout - from real source -->
+    <div class="linkedin-callout reveal" style="margin-top:48px">
+      <div class="lc-header">
+        <div class="lc-avatar">in</div>
+        <div>
+          <div class="lc-name">Irina Makarova</div>
+          <div class="lc-title">CMO | iGaming & Tech | Driving Revenue, Performance & Global Expansion</div>
+          <div class="lc-source">LinkedIn · 11 minutes ago · Global</div>
+        </div>
+      </div>
+      <div class="lc-text">"TikTok doesn't want iGaming brands on its platform. For the past two months I had one major task: understand how a game provider brand can actually benefit from TikTok. Which formats exist. Which ones survive the algorithm. And what it realistically costs... <strong style="color:var(--off)">The first thing to accept: TikTok is not a performance channel.</strong> No direct links to your product. No last-click conversions. TikTok is top-of-funnel — you're building top-of-mind awareness at scale."</div>
+      <div class="lc-highlight">
+        <div class="lc-highlight-text">"Split-screen — half gameplay, half meme or video. More engaging. Also 50–60% more expensive, because TikTok's algorithm actively pushes back on it and few teams know how to handle that. One rule: strip every iGaming element from the gameplay clip. No spin button. No balance. Nothing that signals 'slot.' The cleaner it looks, the longer it survives."</div>
+      </div>
+      <div class="lc-tags">#iGaming #TikTokMarketing</div>
+    </div>
+
+    <div style="max-width:700px;margin:28px auto 0;text-align:center" class="reveal">
+      <p class="body-xl">This is what studios are reduced to: stripping out every iGaming element just to survive an algorithm that doesn't want you. PLURALS TECH built the platform TikTok refuses to be.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ PART 2: PRODUCTION MISALIGNMENT ══ -->
+<section id="misalignment" class="section">
+  <div class="wrap">
+    <div class="label reveal">The internal problem</div>
+    <div style="max-width:660px;margin-top:28px" class="reveal">
+      <h2>Great games keep failing<br><em class="serif">for preventable reasons.</em></h2>
+      <p class="body-lg" style="margin-top:14px">The distribution problem has a twin: studios don't know what players actually want before they commit €200K+ to full production. The result is a brutal hit rate.</p>
+    </div>
+
+    <div class="problem-grid-2 reveal" style="margin-top:48px">
+      <div class="prob-card pc-rose">
+        <div class="prob-who pw-rose">Product teams</div>
+        <h4>Building games without player signal</h4>
+        <p>Game designers rely on competitor analysis, trend reports, and internal intuition. By the time a game reaches players — typically 12–18 months after concept — the trend has shifted. Studios build what they think players want, not what players are actually engaging with right now.</p>
+        <div style="margin-top:16px;padding:14px;background:var(--raised);border-radius:10px">
+          <div style="font-size:10px;color:var(--dim);font-family:var(--fm);margin-bottom:6px;letter-spacing:.06em;text-transform:uppercase">The result</div>
+          <div style="font-family:var(--fd);font-size:22px;font-weight:800;color:var(--rose)">2–3%</div>
+          <div style="font-size:12px;color:var(--mid);margin-top:2px">of games released achieve meaningful commercial success</div>
+        </div>
+      </div>
+      <div class="prob-card pc-gold">
+        <div class="prob-who pw-gold">Marketing teams</div>
+        <h4>Promoting with no distribution channel</h4>
+        <p>Marketing budgets go to conferences, LinkedIn posts, and basic promo videos. These reach other operators and studios — not the players who will actually make the game successful. The team responsible for demand has no channel to players, so they build awareness in the wrong room.</p>
+        <div style="margin-top:16px;padding:14px;background:var(--raised);border-radius:10px">
+          <div style="font-size:10px;color:var(--dim);font-family:var(--fm);margin-bottom:6px;letter-spacing:.06em;text-transform:uppercase">The result</div>
+          <div style="font-family:var(--fd);font-size:22px;font-weight:800;color:var(--gold)">€50K–€200K</div>
+          <div style="font-size:12px;color:var(--mid);margin-top:2px">average studio marketing spend per launch — with no way to measure player-level impact</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:28px 32px;display:flex;gap:20px;align-items:flex-start" class="reveal">
+      <div style="font-size:28px;flex-shrink:0">💡</div>
+      <div>
+        <div style="font-family:var(--fd);font-size:16px;font-weight:700;margin-bottom:8px">What PLURALS TECH does differently</div>
+        <div style="font-size:14px;color:var(--mid);line-height:1.65">We give both teams the same tool. Product teams use real player engagement data to design games that players actually want. Marketing teams use the same platform to distribute content and build pre-launch demand. For the first time, product and commercial are aligned on the same intelligence layer — before a single euro goes into production.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ PART 3: CURRENT CHANNELS ══ -->
+<section id="channels" class="section" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="label reveal">What studios use today</div>
+    <div style="max-width:640px;margin-top:28px" class="reveal">
+      <h2>Every channel falls short<br><em class="serif">in the same way.</em></h2>
+      <p class="body-lg" style="margin-top:14px">None of your current channels reach players. They reach operators, journalists, and other studios. The audience that matters — the person who will actually spin your game — is invisible to your entire marketing stack.</p>
+    </div>
+    <div class="fail-grid reveal">
+      <div class="fail-card">
+        <div class="fail-tag">Networking</div>
+        <div class="fail-name">Conferences & Exhibitions</div>
+        <div class="fail-why">€15K–€100K per exhibition slot. Reaches 300–800 operators and partners. Zero player contact. High ROI for large studios with established operator pipelines — low ROI for challengers trying to break through.</div>
+        <div class="fail-items">
+          <div class="fail-item">No player reach whatsoever — 100% B2B</div>
+          <div class="fail-item">Prohibitively expensive for smaller studios</div>
+          <div class="fail-item">Deals close 3–12 months after conference — by then, trends shift</div>
+          <div class="fail-item">Same faces, same conversations, every year</div>
+        </div>
+      </div>
+      <div class="fail-card">
+        <div class="fail-tag">Social / PR</div>
+        <div class="fail-name">LinkedIn & Media Coverage</div>
+        <div class="fail-why">The go-to channel for studio visibility — but LinkedIn is B2B. Players are not on LinkedIn looking for new games. Press releases in iGaming trade media reach operators, affiliates, and journalists — not the end users whose engagement determines a game's commercial success.</div>
+        <div class="fail-items">
+          <div class="fail-item">Audience is exclusively B2B — no player engagement</div>
+          <div class="fail-item">Article traffic doesn't convert to player sessions</div>
+          <div class="fail-item">Algorithm reach declining for promotional content</div>
+        </div>
+      </div>
+      <div class="fail-card">
+        <div class="fail-tag">Content</div>
+        <div class="fail-name">Promo Videos & Trailers</div>
+        <div class="fail-why">Most studios produce a 60–90 second promo reel for each game. It goes on YouTube, gets shared on LinkedIn, shown at exhibitions. Production cost: €3K–€20K. Views: mostly industry professionals. Player discovery: near zero.</div>
+        <div class="fail-items">
+          <div class="fail-item">No native distribution — content lands on empty channels</div>
+          <div class="fail-item">Not built for scroll-native consumption (wrong format, wrong platform)</div>
+          <div class="fail-item">Watched by competitors, not players</div>
+        </div>
+      </div>
+      <div class="fail-card">
+        <div class="fail-tag">Influencer</div>
+        <div class="fail-name">Streamers & YouTube Creators</div>
+        <div class="fail-why">The closest thing studios have to player-facing content. But long-form streams (20–60 min) don't convert the scroll generation. There's no integrated demo path. Attribution is manual. And studios compete with casino brands for the same streamers — and lose on budget.</div>
+        <div class="fail-items">
+          <div class="fail-item">No direct path from watching to playing</div>
+          <div class="fail-item">Long-form format misses mobile-native Gen Z audience</div>
+          <div class="fail-item">No measurable ROI — views don't correlate to rounds played</div>
+        </div>
+      </div>
+      <div class="fail-card">
+        <div class="fail-tag">Paid</div>
+        <div class="fail-name">Contextual Ads & Programmatic</div>
+        <div class="fail-why">Gambling content is aggressively restricted on every major ad platform. TikTok, Meta, and Google all limit iGaming promotion. Studios that attempt paid acquisition face constant creative rejections, geo-restrictions, and platform bans — before spending a single euro on actual reach.</div>
+        <div class="fail-items">
+          <div class="fail-item">TikTok actively blocks iGaming gameplay clips</div>
+          <div class="fail-item">Meta and Google iGaming restrictions tightening annually</div>
+          <div class="fail-item">No compliant paid channel for direct player acquisition</div>
+        </div>
+      </div>
+      <div class="fail-card" style="background:linear-gradient(135deg,rgba(0,212,177,.08),rgba(0,212,177,.01));border-color:rgba(0,212,177,.2);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:32px">
+        <div style="font-size:32px;margin-bottom:16px">🎯</div>
+        <div style="font-family:var(--fd);font-size:15px;font-weight:700;margin-bottom:10px;color:var(--white)">The channel that's missing</div>
+        <div style="font-size:13px;color:var(--mid);line-height:1.65;margin-bottom:20px">A compliant, player-facing, scroll-native distribution platform built specifically for iGaming content. That's scrollto.app.</div>
+        <a href="#solution" class="btn btn-ghost-teal btn-sm">See the solution →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ PART 4: THE SOLUTION ══ -->
+<section id="solution" class="section">
+  <div class="wrap">
+    <div class="label reveal">The PLURALS approach</div>
+    <div class="solution-layout reveal" style="margin-top:28px">
+      <div>
+        <h2>The distribution layer<br><em class="serif">that didn't exist.</em></h2>
+        <p class="body-lg" style="margin-top:14px">PLURALS TECH built the platform TikTok refuses to be for iGaming: a compliant, scroll-native environment where game content reaches real players — and converts them into demo sessions, demand signals, and operator pressure to adopt your games.</p>
+        <p class="body-lg" style="margin-top:12px">scrollto.app is the first direct studio-to-player channel in the history of the industry. It's the layer between your game and the players who will love it.</p>
+        <div style="display:flex;flex-direction:column;gap:16px;margin-top:28px">
+          <div style="display:flex;gap:14px;align-items:flex-start;padding:18px;background:var(--panel);border:1px solid var(--border);border-radius:13px;transition:border-color .3s" onmouseover="this.style.borderColor='rgba(0,212,177,.25)'" onmouseout="this.style.borderColor='var(--border)'">
+            <div style="font-size:20px;flex-shrink:0">🎬</div>
+            <div><div style="font-family:var(--fd);font-size:14px;font-weight:700;margin-bottom:4px">We turn your game into entertainment</div><div style="font-size:13px;color:var(--mid);line-height:1.55">Not a promo video. Not a static banner. A 15–30 second narrative hook engineered to stop a scroll, create curiosity, and drive a demo swipe. Pixar-level storytelling, slot-mechanics tension, emotional beats — all in the format the scroll generation actually uses.</div></div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start;padding:18px;background:var(--panel);border:1px solid var(--border);border-radius:13px;transition:border-color .3s" onmouseover="this.style.borderColor='rgba(0,212,177,.25)'" onmouseout="this.style.borderColor='var(--border)'">
+            <div style="font-size:20px;flex-shrink:0">📡</div>
+            <div><div style="font-family:var(--fd);font-size:14px;font-weight:700;margin-bottom:4px">We distribute it to players who care</div><div style="font-size:13px;color:var(--mid);line-height:1.55">The scrollto.app algorithm surfaces your game content to players who've already engaged with similar mechanics, themes, and volatility profiles. You don't blast — you target. Every view is from someone mathematically likely to play your game.</div></div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start;padding:18px;background:var(--panel);border:1px solid var(--border);border-radius:13px;transition:border-color .3s" onmouseover="this.style.borderColor='rgba(0,212,177,.25)'" onmouseout="this.style.borderColor='var(--border)'">
+            <div style="font-size:20px;flex-shrink:0">📊</div>
+            <div><div style="font-family:var(--fd);font-size:14px;font-weight:700;margin-bottom:4px">We give you data no one else has</div><div style="font-size:13px;color:var(--mid);line-height:1.55">Player-level engagement with your specific game — before a single operator decision. Watch time, demo rate, mechanic preference, return sessions. This is the intelligence your product team needs to build the next hit.</div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="platform-compare">
+          <div class="plat-card plat-dead">
+            <div class="plat-badge pb-dead">TikTok / Instagram</div>
+            <h4>The platforms that won't have you</h4>
+            <div class="plat-items">
+              <div class="plat-item bad">Blocks gambling content at algorithm level</div>
+              <div class="plat-item bad">Forces removal of all iGaming signals (spin button, balance, logo)</div>
+              <div class="plat-item bad">No direct link to demo or real-money play</div>
+              <div class="plat-item bad">No attribution — you can't measure what converts</div>
+              <div class="plat-item bad">50–60% more expensive due to algorithm friction</div>
+              <div class="plat-item bad">Platform risk: account bans, content removal, policy changes</div>
+            </div>
+          </div>
+          <div class="plat-card plat-alive">
+            <div class="plat-badge pb-alive">scrollto.app</div>
+            <h4>Built for exactly what you do</h4>
+            <div class="plat-items">
+              <div class="plat-item good">iGaming-native — no content stripping required</div>
+              <div class="plat-item good">Direct swipe-to-demo integration (5 seconds)</div>
+              <div class="plat-item good">Full attribution: view → demo → operator click → NDC</div>
+              <div class="plat-item good">UKGC / MGA compliant by design</div>
+              <div class="plat-item good">AI algorithm trained on iGaming engagement data</div>
+              <div class="plat-item good">Dedicated iGaming audience — no topic dilution</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:24px">
+          <div style="font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:14px">What players do on scrollto.app</div>
+          <div style="display:flex;flex-direction:column;gap:0">
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)"><span style="font-size:14px;width:22px">📱</span><span style="font-size:13px;color:var(--mid);flex:1">Scroll — see your game clip in 15 seconds</span><span style="font-size:10px;color:var(--teal);font-family:var(--fm)">Discovery</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)"><span style="font-size:14px;width:22px">👈</span><span style="font-size:13px;color:var(--mid);flex:1">Swipe left — watch live streamer on your game</span><span style="font-size:10px;color:var(--teal);font-family:var(--fm)">Social proof</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)"><span style="font-size:14px;width:22px">👉</span><span style="font-size:13px;color:var(--mid);flex:1">Swipe right — demo your game in 5 seconds</span><span style="font-size:10px;color:var(--teal);font-family:var(--fm)">Trial</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 0"><span style="font-size:14px;width:22px">💰</span><span style="font-size:13px;color:var(--mid);flex:1">Tap CTA — play for real at operator casino</span><span style="font-size:10px;color:var(--teal);font-family:var(--fm)">Revenue</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ PART 5: PRE-LAUNCH VALIDATION ══ -->
+<section id="validation" class="section" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="label reveal">The core innovation</div>
+    <div class="validation-layout reveal" style="margin-top:28px">
+      <div>
+        <h2>Test before you build.<br><em class="serif">Like musicians do.</em></h2>
+        <p class="body-lg" style="margin-top:14px">Before spending €200K+ on a full game production, artists test songs on TikTok. They post 15-second clips, measure engagement, iterate, then release the full track. The ones that trend get investment. The ones that don't get shelved — cheaply.</p>
+        <p class="body-lg" style="margin-top:12px">No one has offered this to game studios. Until now.</p>
+
+        <div style="margin-top:28px;display:flex;flex-direction:column;gap:14px">
+          <div style="padding:20px;background:var(--panel);border:1px solid rgba(0,212,177,.15);border-radius:13px">
+            <div style="font-family:var(--fd);font-size:15px;font-weight:700;margin-bottom:6px">The old way</div>
+            <div style="font-size:13px;color:var(--mid);line-height:1.6">Concept → 12–18 months of production → €150K–€500K spent → launch into 4,000-thumbnail lobby → hope it gets picked up → usually doesn't. 97% failure rate. No iteration signal. No data. No recovery.</div>
+          </div>
+          <div style="padding:20px;background:linear-gradient(135deg,rgba(0,212,177,.1),rgba(0,212,177,.02));border:1px solid rgba(0,212,177,.22);border-radius:13px">
+            <div style="font-family:var(--fd);font-size:15px;font-weight:700;margin-bottom:6px;color:var(--teal)">The PLURALS way</div>
+            <div style="font-size:13px;color:var(--mid);line-height:1.6">Concept → animated teaser (2 weeks, included in subscription) → distribute to real player audience → <strong style="color:var(--off)">measure engagement, demo rate, retention</strong> → AI generates insight report → <strong style="color:var(--off)">Launch / Iterate / Kill</strong> with data. One round of validation can save hundreds of thousands in wasted production.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="music-analogy">
+        <span class="ma-label">The music industry model — applied to iGaming</span>
+        <div class="ma-flow">
+          <div class="ma-step">
+            <div class="ma-icon">🎵</div>
+            <div class="ma-body">
+              <div class="ma-title">Music: 15-sec TikTok clip</div>
+              <div class="ma-desc">Artist posts a hook before the full release. Measures saves, shares, comment sentiment.</div>
+            </div>
+          </div>
+          <div class="ma-step">
+            <div class="ma-icon">🎰</div>
+            <div class="ma-body">
+              <div class="ma-title">Gaming: animated concept teaser</div>
+              <div class="ma-desc">Studio posts a 20-sec narrative clip of the game concept on scrollto.app. Players swipe, demo, react.</div>
+            </div>
+          </div>
+          <div class="ma-step">
+            <div class="ma-icon">📊</div>
+            <div class="ma-body">
+              <div class="ma-title">Measure what matters</div>
+              <div class="ma-desc">Watch time, demo engagement rate, mechanic preference, D7 return rate. Real signal from real players.</div>
+            </div>
+          </div>
+          <div class="ma-step">
+            <div class="ma-icon">🧠</div>
+            <div class="ma-body">
+              <div class="ma-title">AI generates insight report</div>
+              <div class="ma-desc">Which themes resonated? Which mechanic triggered the demo swipe? What should change before production commits?</div>
+            </div>
+          </div>
+          <div class="ma-step">
+            <div class="ma-icon">🚀</div>
+            <div class="ma-body">
+              <div class="ma-title">Launch with demand signal</div>
+              <div class="ma-desc">Game goes to operators with proven player interest data. Adoption rate 3–5× higher than cold pitching.</div>
+            </div>
+          </div>
+        </div>
+        <div class="ma-outcome">
+          <span class="ma-outcome-num">↓ 60%</span>
+          <div class="ma-outcome-label">reduction in wasted production investment — when validation precedes full build</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ PART 6: AI INSIGHTS ══ -->
+<section id="ai" class="section">
+  <div class="wrap">
+    <div class="label reveal">AI intelligence layer</div>
+    <div class="ai-layout reveal" style="margin-top:28px">
+      <div>
+        <h2>Your product team's<br><em class="serif">unfair advantage.</em></h2>
+        <p class="body-lg" style="margin-top:14px">The PLURALS AI engine doesn't just distribute your content. It learns from every player interaction and feeds those insights back to you — before your competitors can act on the same trends.</p>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-top:24px">
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:32px;height:32px;border-radius:9px;background:var(--teal-dim);border:1px solid rgba(0,212,177,.2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">🎨</div>
+            <div><div style="font-family:var(--fd);font-size:14px;font-weight:700;margin-bottom:4px">Theme trending alerts</div><div style="font-size:13px;color:var(--mid);line-height:1.55">Which visual themes, art directions, and narratives are generating outsized engagement right now — before any competitor release has captured the trend.</div></div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:32px;height:32px;border-radius:9px;background:var(--accent-dim);border:1px solid rgba(107,94,255,.2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">⚙️</div>
+            <div><div style="font-family:var(--fd);font-size:14px;font-weight:700;margin-bottom:4px">Mechanic demand mapping</div><div style="font-size:13px;color:var(--mid);line-height:1.55">Which game mechanics drive the highest demo rate and return sessions — cascading reels, multiplier wilds, cluster pays? The data shows what players actually want before they deposit.</div></div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:32px;height:32px;border-radius:9px;background:var(--gold-dim);border:1px solid rgba(240,163,10,.2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">🌍</div>
+            <div><div style="font-family:var(--fd);font-size:14px;font-weight:700;margin-bottom:4px">Geo-specific player preferences</div><div style="font-size:13px;color:var(--mid);line-height:1.55">UK players behave differently from German players, who behave differently from Canadian players. The AI segments by market — so your next game is built for the right audience, not a generic one.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ai-screen">
+        <div class="ai-screen-bar">
+          <span class="dot" style="background:#ff5f5f"></span>
+          <span class="dot" style="background:#ffbd2e"></span>
+          <span class="dot" style="background:#27c93f"></span>
+          <span class="ai-screen-title">AI Insights · Studio Intelligence · PLURALS TECH</span>
+        </div>
+        <div class="ai-body">
+          <div class="ai-kpi-row">
+            <div class="ai-kpi"><span class="ai-kpi-num" style="color:var(--teal)">94K</span><div class="ai-kpi-label">Total demo plays (30d)</div></div>
+            <div class="ai-kpi"><span class="ai-kpi-num" style="color:var(--gold)">22.4%</span><div class="ai-kpi-label">Demo engagement rate</div></div>
+            <div class="ai-kpi"><span class="ai-kpi-num" style="color:var(--accent2)">7.2</span><div class="ai-kpi-label">Avg session depth</div></div>
+          </div>
+          <div class="ai-insight-card">
+            <div class="ai-insight-head"><div class="ai-insight-dot"></div><div class="ai-insight-title">🔥 Trending mechanic: Cluster pays + multiplier cascade</div></div>
+            <div class="ai-insight-text">Games with cluster pay mechanics + multiplier cascades are generating 34% higher demo swipe rates vs. traditional 5-reel formats this month. Recommend prioritising this architecture in next 2 development cycles.</div>
+          </div>
+          <div class="ai-insight-card" style="background:rgba(107,94,255,.08);border-color:rgba(107,94,255,.18)">
+            <div class="ai-insight-head"><div class="ai-insight-dot" style="background:var(--accent2)"></div><div class="ai-insight-title" style="color:var(--accent2)">📍 UK market: Egyptian theme fatigue detected</div></div>
+            <div class="ai-insight-text">Watch time on Egyptian-themed content dropped 18% vs. prior month in UK market. Greek mythology and space themes showing +28% engagement lift. Recommend theme pivot for next UK-targeted release.</div>
+          </div>
+          <div style="margin-bottom:10px">
+            <div style="font-size:9px;color:var(--mid);font-family:var(--fd);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px">Player interest by theme (30-day trend)</div>
+            <div class="ai-theme-row">
+              <span class="ai-theme hot">Greek mythology ↑ 28%</span>
+              <span class="ai-theme hot">Space / sci-fi ↑ 22%</span>
+              <span class="ai-theme hot">Megaways ↑ 15%</span>
+              <span class="ai-theme">Egypt ↓ 18%</span>
+              <span class="ai-theme">Classic fruit ↓ 9%</span>
+              <span class="ai-theme hot">Crash games ↑ 41%</span>
+            </div>
+          </div>
+          <div class="ai-trend-chart">
+            <div class="ai-chart-title">Demo engagement by volatility preference (this month)</div>
+            <div class="ai-bars">
+              <div class="ai-bar ab-t" style="height:45%"></div><div class="ai-bar ab-t" style="height:58%"></div>
+              <div class="ai-bar ab-t" style="height:52%"></div><div class="ai-bar ab-g" style="height:70%"></div>
+              <div class="ai-bar ab-g" style="height:85%"></div><div class="ai-bar ab-g" style="height:78%"></div>
+              <div class="ai-bar ab-a" style="height:100%"></div><div class="ai-bar ab-a" style="height:94%"></div>
+              <div class="ai-bar ab-a" style="height:88%"></div><div class="ai-bar ab-t" style="height:60%"></div>
+              <div class="ai-bar ab-t" style="height:55%"></div><div class="ai-bar ab-g" style="height:72%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ PART 7: VALUE PROPS ══ -->
+<section id="value" class="section" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="label reveal">What you get</div>
+    <div style="text-align:center;max-width:640px;margin:28px auto 48px" class="reveal">
+      <h2>Seven things you can't get anywhere else.</h2>
+      <p class="body-xl" style="margin-top:12px">PLURALS TECH gives studios capabilities that have never existed in the iGaming industry. This isn't incremental improvement — it's a structural shift in how games succeed.</p>
+    </div>
+    <div class="value-grid-3 reveal">
+      <div class="value-card teal-feat">
+        <span class="vc-icon">🎯</span>
+        <div class="vc-title">Direct player demand</div>
+        <div class="vc-desc">For the first time, your game reaches players before it reaches operators. Player demand signal generated on scrollto.app becomes a commercial argument in your operator conversations — backed by data, not pitch decks.</div>
+        <div class="vc-metric"><span class="vc-num" style="color:var(--teal)">3–5×</span><div class="vc-label">higher operator adoption rate when player demand data exists</div></div>
+      </div>
+      <div class="value-card">
+        <span class="vc-icon">🔬</span>
+        <div class="vc-title">Pre-launch validation</div>
+        <div class="vc-desc">Test game concepts before committing to full production. Animated teasers go to real players, engagement is measured, AI generates an insight report. Launch with conviction — or iterate cheaply before the budget commits.</div>
+        <div class="vc-metric"><span class="vc-num" style="color:var(--gold)">↓ 60%</span><div class="vc-label">reduction in wasted production spend</div></div>
+      </div>
+      <div class="value-card">
+        <span class="vc-icon">🧠</span>
+        <div class="vc-title">AI production intelligence</div>
+        <div class="vc-desc">Real-time data on trending themes, mechanic demand, geo preferences, and player segment behaviour. Your product team designs for what players want now — not what trended six months ago in a competitor analysis report.</div>
+        <div class="vc-metric"><span class="vc-num" style="color:var(--accent2)">First</span><div class="vc-label">player-level production intelligence in the industry</div></div>
+      </div>
+      <div class="value-card">
+        <span class="vc-icon">🎬</span>
+        <div class="vc-title">Pixar-quality content</div>
+        <div class="vc-desc">Not generic promo clips. Narrative-driven, emotionally engineered short-form content built for scroll-native consumption. We make your game look as exciting as it actually is — and we do it in a format players actually watch.</div>
+        <div class="vc-metric"><span class="vc-num" style="color:var(--teal)">22%</span><div class="vc-label">average demo engagement rate vs. 2–4% industry benchmark</div></div>
+      </div>
+      <div class="value-card">
+        <span class="vc-icon">💼</span>
+        <div class="vc-title">Stronger operator leverage</div>
+        <div class="vc-desc">Walk into operator conversations with player demand data. "Our last game generated 94,000 demo plays and 22% engagement rate before launch" is a fundamentally different conversation than "here's our new title." Demand precedes supply.</div>
+        <div class="vc-metric"><span class="vc-num" style="color:var(--gold)">Data-first</span><div class="vc-label">operator pitching — not relationship-first</div></div>
+      </div>
+      <div class="value-card">
+        <span class="vc-icon">🌱</span>
+        <div class="vc-title">Brand that compounds</div>
+        <div class="vc-desc">A verified studio channel on scrollto.app builds a player following over time. Players who love your game mechanics follow your studio and see every new release. Brand equity compounds — each launch reaches an existing, warm audience.</div>
+        <div class="vc-metric"><span class="vc-num" style="color:var(--accent2)">∞</span><div class="vc-label">compounding follower growth per release</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ PART 8: REVENUE SCENARIOS ══ -->
+<section id="revenue" class="section">
+  <div class="wrap">
+    <div class="label reveal">Revenue impact</div>
+    <div style="max-width:640px;margin-top:28px" class="reveal">
+      <h2>What happens when<br><em class="serif">your game hits trend.</em></h2>
+      <p class="body-lg" style="margin-top:14px">A game that gains pre-launch traction on scrollto.app doesn't just perform better at launch — it creates compounding commercial momentum. Here's what the numbers look like at two levels of engagement.</p>
+    </div>
+
+    <div class="scenario-layout reveal">
+      <div class="scenario-card sc-baseline">
+        <div class="sc-badge scb-base">Standard release</div>
+        <div class="sc-title">No content-driven pre-launch</div>
+        <div class="sc-metrics">
+          <div class="sc-metric"><span class="sc-metric-label">Operator lobbies at launch</span><span class="sc-metric-val" style="color:var(--mid)">45</span></div>
+          <div class="sc-metric"><span class="sc-metric-label">Player sessions Month 1</span><span class="sc-metric-val" style="color:var(--mid)">12,000</span></div>
+          <div class="sc-metric"><span class="sc-metric-label">Avg bet (cold traffic)</span><span class="sc-metric-val" style="color:var(--mid)">€0.48</span></div>
+          <div class="sc-metric"><span class="sc-metric-label">GGR Month 1</span><span class="sc-metric-val" style="color:var(--mid)">€8,640</span></div>
+          <div class="sc-metric"><span class="sc-metric-label">Studio revenue share (20%)</span><span class="sc-metric-val" style="color:var(--mid)">€1,728</span></div>
+          <div class="sc-metric"><span class="sc-metric-label">Games featured Month 3</span><span class="sc-metric-val" style="color:var(--mid)">Declining</span></div>
+        </div>
+        <div class="sc-highlight">
+          <span class="sc-highlight-num" style="color:var(--dim)">€1.7K</span>
+          <div class="sc-highlight-label">studio revenue in Month 1 — typical for a cold release</div>
+        </div>
+      </div>
+      <div class="scenario-card sc-plurals">
+        <div class="sc-uplift">↑ 8–12×</div>
+        <div class="sc-badge scb-plus">With PLURALS</div>
+        <div class="sc-title">Content-driven, pre-warmed launch</div>
+        <div class="sc-metrics">
+          <div class="sc-metric"><span class="sc-metric-label">Operator lobbies at launch</span><span class="sc-metric-val" style="color:var(--teal)">120+</span></div>
+          <div class="sc-metric"><span class="sc-metric-label">Player sessions Month 1</span><span class="sc-metric-val" style="color:var(--teal)">68,000</span></div>
+          <div class="sc-metric"><span class="sc-metric-label">Avg bet (pre-warmed player)</span><span class="sc-metric-val" style="color:var(--teal)">€0.85</span></div>
+          <div class="sc-metric"><span class="sc-metric-label">GGR Month 1</span><span class="sc-metric-val" style="color:var(--teal)">€86,700</span></div>
+          <div class="sc-metric"><span class="sc-metric-label">Studio revenue share (20%)</span><span class="sc-metric-val" style="color:var(--teal)">€17,340</span></div>
+          <div class="sc-metric"><span class="sc-metric-label">Games featured Month 3</span><span class="sc-metric-val" style="color:var(--teal)">Growing (demand signal)</span></div>
+        </div>
+        <div class="sc-highlight teal">
+          <span class="sc-highlight-num">€17.3K</span>
+          <div class="sc-highlight-label">studio revenue Month 1 · ×10 vs. cold release · based on pre-warmed player behaviour data</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:24px 28px" class="reveal">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px">
+        <div style="text-align:center">
+          <div style="font-family:var(--fd);font-size:28px;font-weight:800;color:var(--teal);letter-spacing:-.04em">120+</div>
+          <div style="font-size:12px;color:var(--mid);margin-top:4px">operators adopt faster when player demand data exists vs. 45 on cold launch</div>
+        </div>
+        <div style="text-align:center;border-left:1px solid var(--border);border-right:1px solid var(--border)">
+          <div style="font-family:var(--fd);font-size:28px;font-weight:800;color:var(--gold);letter-spacing:-.04em">77%</div>
+          <div style="font-size:12px;color:var(--mid);margin-top:4px">higher avg bet size from players who demo'd before depositing — they play with more intent</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:var(--fd);font-size:28px;font-weight:800;color:var(--accent2);letter-spacing:-.04em">10×</div>
+          <div style="font-size:12px;color:var(--mid);margin-top:4px">potential Month 1 revenue uplift on a content-driven launch vs. standard release</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ STUDIO DASHBOARD ══ -->
+<section id="dashboard" class="section" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="label reveal">Your studio dashboard</div>
+    <div style="max-width:640px;margin-top:28px" class="reveal">
+      <h2>Everything your product<br><em class="serif">and marketing teams need.</em></h2>
+      <p class="body-lg" style="margin-top:14px">One platform. Real-time data. Insights your product team uses to design the next game, and your marketing team uses to prove it's worth launching.</p>
+    </div>
+
+    <div class="studio-dash-full reveal" style="margin-top:40px">
+      <div class="sdf-bar">
+        <span class="dot" style="background:#ff5f5f"></span>
+        <span class="dot" style="background:#ffbd2e"></span>
+        <span class="dot" style="background:#27c93f"></span>
+        <span class="sdf-title">Studio Intelligence Dashboard · PLURALS TECH</span>
+        <span class="sdf-date">March 2026 · Live</span>
+      </div>
+      <div class="sdf-body">
+        <!-- KPI row -->
+        <div class="sdf-kpi-row">
+          <div class="skpi"><span class="skpi-num sk-up">284K</span><div class="skpi-label">Impressions this month</div><div class="skpi-change sk-up">↑ 41%</div></div>
+          <div class="skpi"><span class="skpi-num sk-gold">94K</span><div class="skpi-label">Demo play sessions</div><div class="skpi-change sk-up">↑ 58%</div></div>
+          <div class="skpi"><span class="skpi-num sk-acc">22.4%</span><div class="skpi-label">Demo engagement rate</div><div class="skpi-change sk-up">↑ 4.1pts</div></div>
+          <div class="skpi"><span class="skpi-num sk-em">4,100</span><div class="skpi-label">Studio followers gained</div><div class="skpi-change sk-up">↑ 34%</div></div>
+          <div class="skpi"><span class="skpi-num sk-gold">€86K</span><div class="skpi-label">Attributed GGR</div><div class="skpi-change sk-up">↑ 10×</div></div>
+        </div>
+        <!-- Row 2 -->
+        <div class="sdf-row2">
+          <div class="sdf-chart">
+            <div class="sdf-chart-title">Impressions vs. Demo plays — 14 days</div>
+            <div class="sdf-bars">
+              <div class="sdf-bar-g" style="height:28%"></div><div class="sdf-bar-g2" style="height:16%"></div>
+              <div class="sdf-bar-g" style="height:35%"></div><div class="sdf-bar-g2" style="height:22%"></div>
+              <div class="sdf-bar-g" style="height:50%"></div><div class="sdf-bar-g2" style="height:32%"></div>
+              <div class="sdf-bar-g" style="height:60%"></div><div class="sdf-bar-g2" style="height:40%"></div>
+              <div class="sdf-bar-g" style="height:72%"></div><div class="sdf-bar-g2" style="height:50%"></div>
+              <div class="sdf-bar-g" style="height:85%"></div><div class="sdf-bar-g2" style="height:62%"></div>
+              <div class="sdf-bar-g" style="height:100%"></div><div class="sdf-bar-g2" style="height:74%"></div>
+            </div>
+            <div style="display:flex;gap:12px;margin-top:8px">
+              <div style="display:flex;align-items:center;gap:5px"><div style="width:8px;height:8px;border-radius:2px;background:var(--teal)"></div><span style="font-size:9px;color:var(--dim)">Impressions</span></div>
+              <div style="display:flex;align-items:center;gap:5px"><div style="width:8px;height:8px;border-radius:2px;background:var(--accent)"></div><span style="font-size:9px;color:var(--dim)">Demo plays</span></div>
+            </div>
+          </div>
+          <div class="sdf-insight-col">
+            <div class="sdf-insight-title">AI Insights this week</div>
+            <div class="sdf-insight-item"><div class="sdf-insight-icon">🔥</div><div class="sdf-insight-text"><strong>Cluster mechanics</strong> driving 34% higher demo rate than 5-reel format this month</div></div>
+            <div class="sdf-insight-item"><div class="sdf-insight-icon">📍</div><div class="sdf-insight-text"><strong>UK market:</strong> Egyptian theme fatigue detected. Greek / space themes outperforming</div></div>
+            <div class="sdf-insight-item"><div class="sdf-insight-icon">⚡</div><div class="sdf-insight-text"><strong>High volatility</strong> preference growing among 25–34 age segment (+22% vs. last month)</div></div>
+            <div class="sdf-insight-item"><div class="sdf-insight-icon">🌍</div><div class="sdf-insight-text"><strong>Germany:</strong> Crash game mechanic interest up 41% — underserved by current game library</div></div>
+          </div>
+        </div>
+        <!-- Row 3 -->
+        <div class="sdf-row3">
+          <div class="sdf-funnel">
+            <div class="sdf-fn-title">Player acquisition funnel (this month)</div>
+            <div class="fn-row"><span class="fn-icon">👁</span><div class="fn-track"><div class="fn-fill" style="width:100%;background:var(--accent);opacity:.6"></div></div><span class="fn-val">284K</span><span class="fn-pct">100%</span></div>
+            <div class="fn-row"><span class="fn-icon">👉</span><div class="fn-track"><div class="fn-fill" style="width:58%;background:var(--teal);opacity:.65"></div></div><span class="fn-val">165K</span><span class="fn-pct">58%</span></div>
+            <div class="fn-row"><span class="fn-icon">🎮</span><div class="fn-track"><div class="fn-fill" style="width:33%;background:var(--teal);opacity:.8"></div></div><span class="fn-val">94K</span><span class="fn-pct">33%</span></div>
+            <div class="fn-row"><span class="fn-icon">🔗</span><div class="fn-track"><div class="fn-fill" style="width:9%;background:var(--gold);opacity:.8"></div></div><span class="fn-val">25K</span><span class="fn-pct">9%</span></div>
+            <div class="fn-row"><span class="fn-icon">💳</span><div class="fn-track"><div class="fn-fill" style="width:2%;background:var(--emerald);opacity:.9"></div></div><span class="fn-val">3.2K</span><span class="fn-pct">1.1%</span></div>
+            <div style="margin-top:12px;padding:10px;background:var(--raised);border-radius:8px;text-align:center">
+              <div style="font-size:9px;color:var(--dim);font-family:var(--fm);margin-bottom:3px">End-to-end conversion</div>
+              <div style="font-family:var(--fd);font-size:15px;font-weight:800;color:var(--teal)">Impression → NDC: 1.1%</div>
+            </div>
+          </div>
+          <div class="sdf-games">
+            <div class="sdf-fn-title">Game performance breakdown</div>
+            <div class="game-row hdr">
+              <div class="g-cell">Game</div><div class="g-cell">Plays</div><div class="g-cell">Demo rate</div><div class="g-cell">Followers</div><div class="g-cell">GGR</div>
+            </div>
+            <div class="game-row">
+              <div class="g-cell"><div class="g-name-wrap"><div class="g-thumb">⚡</div><span>Gates of Olympus</span></div></div>
+              <div class="g-cell g-val g-up">42.1K</div><div class="g-cell g-val g-up">24.8%</div><div class="g-cell g-val g-gold">+1,240</div><div class="g-cell g-val g-up">€32K</div>
+            </div>
+            <div class="game-row">
+              <div class="g-cell"><div class="g-name-wrap"><div class="g-thumb">🌌</div><span>Starlux Crash</span></div></div>
+              <div class="g-cell g-val g-up">28.4K</div><div class="g-cell g-val g-up">21.2%</div><div class="g-cell g-val g-gold">+880</div><div class="g-cell g-val g-up">€24K</div>
+            </div>
+            <div class="game-row">
+              <div class="g-cell"><div class="g-name-wrap"><div class="g-thumb">🐺</div><span>Wolf Cascade</span></div></div>
+              <div class="g-cell g-val g-up">19.2K</div><div class="g-cell g-val g-up">18.4%</div><div class="g-cell g-val g-gold">+520</div><div class="g-cell g-val g-mid">€18K</div>
+            </div>
+            <div class="game-row">
+              <div class="g-cell"><div class="g-name-wrap"><div class="g-thumb">🏺</div><span>Anubis Hold</span></div></div>
+              <div class="g-cell g-val g-mid">12.8K</div><div class="g-cell g-val" style="color:var(--rose)">8.1%</div><div class="g-cell g-val g-gold">+240</div><div class="g-cell g-val g-mid">€9K</div>
+            </div>
+            <div class="game-row">
+              <div class="g-cell"><div class="g-name-wrap"><div class="g-thumb">🍬</div><span>Candy Megaways</span></div></div>
+              <div class="g-cell g-val g-up">11.6K</div><div class="g-cell g-val g-up">20.6%</div><div class="g-cell g-val g-gold">+380</div><div class="g-cell g-val g-up">€3K</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ WORKFLOW ══ -->
+<section id="workflow" class="section">
+  <div class="wrap">
+    <div class="label reveal">How it works</div>
+    <div style="text-align:center;max-width:620px;margin:28px auto 56px" class="reveal">
+      <h2>From game concept<br><em class="serif">to trending title.</em></h2>
+      <p class="body-lg" style="margin-top:14px">Seven steps — from your first studio submission to operators competing to feature your game. This is what the PLURALS workflow looks like in practice.</p>
+    </div>
+    <div class="workflow-steps reveal">
+      <div class="ws-step">
+        <div class="ws-marker wsm-1">01</div>
+        <div class="ws-body">
+          <span class="ws-tag">Studio submits</span>
+          <h3>Concept or game brief</h3>
+          <p>Submit a game concept (for pre-launch validation) or a fully developed game (for launch campaigns). Includes: theme, key mechanic, target market, RTP profile, and any existing creative assets. Our team reviews within 48 hours.</p>
+          <div class="ws-chips"><span class="ws-chip">Concept brief</span><span class="ws-chip">Game spec</span><span class="ws-chip">Target market</span><span class="ws-chip">Art direction</span></div>
+          <div class="ws-time">⏱ Day 1–2</div>
+        </div>
+      </div>
+      <div class="ws-step">
+        <div class="ws-marker wsm-2">02</div>
+        <div class="ws-body">
+          <span class="ws-tag">Content production</span>
+          <h3>Animation Studio creates teaser</h3>
+          <p>Our Animation Studio produces a 15–30 second narrative-driven clip. Not a generic promo reel — an emotionally engineered short with a scroll-stop hook, a mechanic reveal, and a cliffhanger ending. Built for scrollto.app's format, optimised for demo conversion. Typically delivered within 5–10 business days.</p>
+          <div class="ws-chips"><span class="ws-chip">Narrative hook</span><span class="ws-chip">Mechanic reveal</span><span class="ws-chip">Cliffhanger cut</span><span class="ws-chip">A/B creative variants</span></div>
+          <div class="ws-time">⏱ Day 3–12</div>
+        </div>
+      </div>
+      <div class="ws-step">
+        <div class="ws-marker wsm-3">03</div>
+        <div class="ws-body">
+          <span class="ws-tag">Distribution</span>
+          <h3>Content enters the feed</h3>
+          <p>Your teaser is distributed through the scrollto.app algorithmic feed — targeted to players who've engaged with similar mechanics, themes, and volatility profiles. Live streamers and AI streamers begin covering your game. Content is A/B tested across creative variants to maximise demo conversion.</p>
+          <div class="ws-chips"><span class="ws-chip">Algorithm targeting</span><span class="ws-chip">Creator outreach</span><span class="ws-chip">AI streamer coverage</span><span class="ws-chip">A/B testing</span></div>
+          <div class="ws-time">⏱ Day 12–30</div>
+        </div>
+      </div>
+      <div class="ws-step">
+        <div class="ws-marker wsm-4">04</div>
+        <div class="ws-body">
+          <span class="ws-tag">Data collection</span>
+          <h3>Real player engagement measured</h3>
+          <p>Your studio dashboard shows: watch time by second, demo swipe rate, mechanic interaction depth, session return rate, and geo-level engagement breakdown. Every data point is segmented by player profile — age, play style, market — so you understand exactly who your game resonates with and why.</p>
+          <div class="ws-chips"><span class="ws-chip">Watch time heatmap</span><span class="ws-chip">Demo rate</span><span class="ws-chip">Mechanic preference</span><span class="ws-chip">Geo breakdown</span></div>
+          <div class="ws-time">⏱ Month 1 (ongoing)</div>
+        </div>
+      </div>
+      <div class="ws-step">
+        <div class="ws-marker wsm-5">05</div>
+        <div class="ws-body">
+          <span class="ws-tag">AI insights</span>
+          <h3>Intelligence report generated</h3>
+          <p>The AI engine synthesises engagement data into an actionable insight report: which themes drove the highest demo rate, which mechanics triggered the most session depth, what players said in comments, and what the data predicts about commercial performance. Product team uses this to iterate or commit to full production.</p>
+          <div class="ws-chips"><span class="ws-chip">Theme resonance score</span><span class="ws-chip">Mechanic demand rank</span><span class="ws-chip">Launch confidence score</span><span class="ws-chip">Iteration recommendations</span></div>
+          <div class="ws-time">⏱ End of Month 1</div>
+        </div>
+      </div>
+      <div class="ws-step">
+        <div class="ws-marker wsm-6">06</div>
+        <div class="ws-body">
+          <span class="ws-tag">Launch decision</span>
+          <h3>Launch, iterate, or kill — with data</h3>
+          <p>Three clear outcomes based on engagement signal: Launch with confidence (high engagement, strong demo conversion), Iterate with specific direction (data tells you exactly what to change), or Shelve (save full production investment). This is the decision that changes studio economics. Instead of a 97% failure rate, studios build with evidence.</p>
+          <div class="ws-chips"><span class="ws-chip">Launch ✓</span><span class="ws-chip">Iterate with direction</span><span class="ws-chip">Kill cheaply</span></div>
+          <div class="ws-time">⏱ Month 1–2</div>
+        </div>
+      </div>
+      <div class="ws-step">
+        <div class="ws-marker wsm-7">07</div>
+        <div class="ws-body">
+          <span class="ws-tag">Commercial momentum</span>
+          <h3>Operator adoption + revenue scaling</h3>
+          <p>Games with proven player demand data are adopted 3–5× faster by operators. Your studio enters operator conversations with engagement metrics, demo play numbers, and audience profile data — not just a pitch. Operators pick up trending games faster, feature them more prominently, and your GGR grows from Month 1 rather than slowly building from zero.</p>
+          <div class="ws-chips"><span class="ws-chip">Operator demand data</span><span class="ws-chip">Faster adoption</span><span class="ws-chip">Higher GGR Month 1</span><span class="ws-chip">Compounding brand</span></div>
+          <div class="ws-time">⏱ Month 2+ (ongoing)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ COMPARE ══ -->
+<section id="compare" class="section" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="label reveal">PLURALS vs. alternatives</div>
+    <div style="max-width:640px;margin-top:28px" class="reveal">
+      <h2>Side by side.</h2>
+      <p class="body-lg" style="margin-top:14px">How PLURALS compares to what studios are using today — across the metrics that determine whether a game succeeds commercially.</p>
+    </div>
+    <div class="reveal" style="overflow-x:auto">
+      <table class="ct">
+        <thead>
+          <tr>
+            <th>Capability</th>
+            <th>Conferences / PR</th>
+            <th>Promo videos</th>
+            <th>Streamers</th>
+            <th style="color:var(--teal)">PLURALS TECH ✓</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="ct-feat">Direct-to-player distribution</td><td><span class="ct-no">✕</span></td><td><span class="ct-no">✕</span></td><td><span class="ct-part">Partial</span></td><td><span class="ct-yes">✓ scroll-native</span></td></tr>
+          <tr><td class="ct-feat">Pre-launch player validation</td><td><span class="ct-no">✕</span></td><td><span class="ct-no">✕</span></td><td><span class="ct-no">✕</span></td><td><span class="ct-yes">✓ teaser → signal</span></td></tr>
+          <tr><td class="ct-feat">Integrated demo play (5 sec)</td><td><span class="ct-no">✕</span></td><td><span class="ct-no">✕</span></td><td><span class="ct-no">✕</span></td><td><span class="ct-yes">✓ swipe right</span></td></tr>
+          <tr><td class="ct-feat">AI production intelligence</td><td><span class="ct-no">✕</span></td><td><span class="ct-no">✕</span></td><td><span class="ct-no">✕</span></td><td><span class="ct-yes">✓ real-time insights</span></td></tr>
+          <tr><td class="ct-feat">Player-level engagement data</td><td><span class="ct-no">✕</span></td><td><span class="ct-part">View count only</span></td><td><span class="ct-part">Partial (manual)</span></td><td><span class="ct-yes">✓ full funnel</span></td></tr>
+          <tr><td class="ct-feat">Compliance-safe (EU regulated)</td><td><span class="ct-yes">✓</span></td><td><span class="ct-part">Depends on platform</span></td><td><span class="ct-part">Studio dependent</span></td><td><span class="ct-yes">✓ by design</span></td></tr>
+          <tr><td class="ct-feat">Operator negotiation leverage</td><td><span class="ct-part">Relationship only</span></td><td><span class="ct-no">✕</span></td><td><span class="ct-part">Anecdotal</span></td><td><span class="ct-yes">✓ player data</span></td></tr>
+          <tr><td class="ct-feat">Compounding studio brand</td><td><span class="ct-no">✕ (one-time)</span></td><td><span class="ct-no">✕</span></td><td><span class="ct-part">Creator-dependent</span></td><td><span class="ct-yes">✓ follower channel</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ PRICING ══ -->
+<section id="pricing" class="section">
+  <div class="wrap">
+    <div class="label reveal">Pricing</div>
+    <div style="text-align:center;max-width:600px;margin:28px auto 0" class="reveal">
+      <h2>Built for studios<br><em class="serif">at every stage.</em></h2>
+      <p class="body-xl" style="margin-top:14px">From challenger studios launching their first game to established providers managing a full portfolio — there's a plan that fits your stage and ambition.</p>
+    </div>
+    <div class="pricing-cards reveal">
+      <div class="pc">
+        <span class="pc-tier">Entry · Verified</span>
+        <div class="pc-name">Studio Channel</div>
+        <span class="pc-amount">€999</span>
+        <span class="pc-suffix">per month</span>
+        <div class="pc-desc">Establish your studio's presence on scrollto.app. Verified channel, basic game analytics, and launch notification tools. The foundation for every studio starting their direct-to-player journey.</div>
+        <div class="pc-feats">
+          <div class="pc-feat">Verified studio channel (player-facing)</div>
+          <div class="pc-feat">Full game library on channel</div>
+          <div class="pc-feat">Player analytics dashboard (basic)</div>
+          <div class="pc-feat">Launch notification to followers</div>
+          <div class="pc-feat">Demo integration for all games</div>
+          <div class="pc-feat">Monthly insight report</div>
+        </div>
+        <a href="#final-cta" class="btn btn-outline" style="width:100%;justify-content:center">Get Studio Channel</a>
+      </div>
+
+      <div class="pc best">
+        <div class="pc-best-badge">Most popular</div>
+        <span class="pc-tier">Growth · Featured</span>
+        <div class="pc-name">Featured Game Slot</div>
+        <span class="pc-amount">€1,499</span>
+        <span class="pc-suffix">per month</span>
+        <div class="pc-desc">Everything in Studio Channel, plus featured placement in the discovery feed and priority visibility at launch. For studios that want to be found, not just listed.</div>
+        <div class="pc-feats">
+          <div class="pc-feat">All Studio Channel features</div>
+          <div class="pc-feat">Featured placement in discovery feed</div>
+          <div class="pc-feat">Priority category page visibility</div>
+          <div class="pc-feat">Boosted launch reach (2× standard)</div>
+          <div class="pc-feat">Weekly performance reports</div>
+          <div class="pc-feat">AI theme & mechanic trend alerts</div>
+          <div class="pc-feat">A/B content testing (2 variants)</div>
+        </div>
+        <a href="#final-cta" class="btn btn-teal" style="width:100%;justify-content:center">Get Featured Game Slot</a>
+        <div class="pc-note">Most studios start here after first month</div>
+      </div>
+
+      <div class="pc">
+        <span class="pc-tier">Launch · Full Stack</span>
+        <div class="pc-name">Game Launch Package</div>
+        <span class="pc-amount">€2,999</span>
+        <span class="pc-suffix">one-time per launch</span>
+        <div class="pc-desc">Full-service game launch campaign. Animation Studio produces a bespoke teaser, creator and streamer campaign activates, full analytics from day one. Add this to any subscription tier for a major release.</div>
+        <div class="pc-feats">
+          <div class="pc-feat">Custom animated teaser (Animation Studio)</div>
+          <div class="pc-feat">Creator seeding campaign (5–10 creators)</div>
+          <div class="pc-feat">AI streamer coverage activation</div>
+          <div class="pc-feat">Featured placement (launch week)</div>
+          <div class="pc-feat">Full launch analytics — real-time</div>
+          <div class="pc-feat">Pre-launch validation teaser option</div>
+          <div class="pc-feat">Post-launch AI insight report</div>
+          <div class="pc-feat">Operator demand data package</div>
+        </div>
+        <a href="#final-cta" class="btn btn-ghost-teal" style="width:100%;justify-content:center">Book a Launch</a>
+        <div class="pc-note">Can be combined with any monthly tier</div>
+      </div>
+    </div>
+
+    <!-- Enterprise -->
+    <div style="margin-top:18px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap" class="reveal">
+      <div>
+        <div style="font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Enterprise · Portfolio</div>
+        <div style="font-family:var(--fd);font-size:19px;font-weight:700;margin-bottom:8px">Managing multiple games? Let's build a custom portfolio plan.</div>
+        <div style="font-size:13px;color:var(--mid);max-width:540px;line-height:1.65">Studios releasing 3+ games per year qualify for portfolio pricing — covering your full release calendar with one agreement. Includes dedicated account manager, priority AI insights, and custom analytics integration.</div>
+      </div>
+      <a href="#final-cta" class="btn btn-outline" style="flex-shrink:0">Discuss portfolio pricing</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ AUTHORITY ══ -->
+<section id="authority" class="section" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="label reveal">Market context</div>
+    <div style="text-align:center;max-width:620px;margin:28px auto 48px" class="reveal">
+      <h2>The studios that move first<br><em class="serif">define the standard.</em></h2>
+      <p class="body-lg" style="margin-top:14px">This category of content-driven game distribution doesn't exist yet. The studios that build it with us now set the benchmark every competitor will be measured against.</p>
+    </div>
+    <div class="auth-grid reveal">
+      <div class="auth-card"><span class="auth-stat" style="color:var(--teal)">$117B</span><div class="auth-label">Global iGaming market 2025 · 12.3% CAGR · games is the fastest growing segment</div></div>
+      <div class="auth-card"><span class="auth-stat" style="color:var(--rose)">~97%</span><div class="auth-label">of game releases fail to achieve meaningful commercial traction — the problem PLURALS solves</div></div>
+      <div class="auth-card"><span class="auth-stat" style="color:var(--gold)">€500K+</span><div class="auth-label">average annual studio marketing spend with no player-facing channel — all going to B2B</div></div>
+      <div class="auth-card"><span class="auth-stat" style="color:var(--accent2)">3–5×</span><div class="auth-label">higher operator adoption rate for games with pre-launch player demand signal</div></div>
+    </div>
+    <div style="margin-top:28px;max-width:760px;margin-left:auto;margin-right:auto;background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:32px" class="reveal">
+      <div style="display:flex;gap:20px;align-items:flex-start">
+        <div style="font-size:32px;flex-shrink:0;margin-top:4px">💬</div>
+        <div>
+          <div style="font-family:var(--fi);font-size:19px;font-style:italic;color:var(--white);line-height:1.42;margin-bottom:14px">"Studios all do the same things. LinkedIn. Exhibitions. Cold outreach. Game providers must promote themselves — without operators they will not survive. But the tools don't exist. Operators want trending games. Nobody is creating the trend."</div>
+          <div style="font-size:12px;color:var(--dim)">— Game provider CEO · PLURALS TECH research interviews · Q1 2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ FINAL CTA ══ -->
+<section id="final-cta" class="section" style="position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(0,212,177,.07) 0%,transparent 70%);pointer-events:none"></div>
+  <div class="wrap">
+    <div class="footer-cta reveal">
+      <div class="label" style="justify-content:center;color:var(--teal);margin-bottom:20px">Build the future together</div>
+      <h2>Your game deserves<br><em class="serif">to be seen.</em></h2>
+      <p>Great games are failing in silence every day — not because they're not good enough, but because the distribution channel that takes them to players has never existed. We built it. Join us.</p>
+      <div class="fcta-btns">
+        <a href="mailto:studios@plurals.tech" class="btn btn-teal btn-lg">
+          Start a studio channel
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="mailto:studios@plurals.tech?subject=Launch enquiry" class="btn btn-outline btn-lg">Book a launch campaign</a>
+      </div>
+      <div class="footer-message">
+        <p>Want to see the platform before committing? We'll give you a full product walkthrough, show your existing game's placement potential, and run a pre-launch validation simulation — free of charge.</p>
+        <p style="margin-top:10px">Not a studio? <a href="plurals-operators.html">Operator page →</a> &nbsp;|&nbsp; <a href="mailto:invest@plurals.tech">Investor enquiries →</a></p>
+      </div>
+    </div>
+
+    <!-- Closing statement -->
+    <div style="text-align:center;max-width:680px;margin:64px auto 0;padding:44px;background:linear-gradient(135deg,rgba(0,212,177,.08),rgba(0,212,177,.02));border:1px solid rgba(0,212,177,.15);border-radius:20px" class="reveal">
+      <h3 style="font-size:clamp(18px,2.5vw,26px);margin-bottom:14px">The scroll generation is already deciding<br><em class="serif">which games they love.</em></h3>
+      <p style="font-size:15px;color:var(--mid);line-height:1.7">For the first time in iGaming history, studios can be part of that decision — before it's made at the casino lobby. PLURALS TECH is the platform between your game and the players who will make it successful. The question isn't whether this shift happens. It's whether your studio leads it.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="wrap">
+    <div class="footer-inner">
+      <a href="plurals-landing-v3.html" class="nav-logo" style="text-decoration:none">
+        <svg width="26" height="26" viewBox="0 0 34 34" fill="none">
+          <circle cx="17" cy="12.5" r="9.5" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" fill="none"/>
+          <circle cx="11.5" cy="22.5" r="9.5" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" fill="none"/>
+          <circle cx="22.5" cy="22.5" r="9.5" stroke="rgba(255,255,255,0.38)" stroke-width="1.2" fill="none"/>
+        </svg>
+        <span class="nav-logo-type" style="font-size:11px;color:var(--dim)">PLURALS TECH</span>
+      </a>
+      <ul class="footer-nav">
+        <li><a href="#problem">The Problem</a></li>
+        <li><a href="#solution">Solution</a></li>
+        <li><a href="#validation">Validation</a></li>
+        <li><a href="#ai">AI Insights</a></li>
+        <li><a href="#workflow">How It Works</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="mailto:studios@plurals.tech">Contact</a></li>
+      </ul>
+      <div class="footer-socials">
+        <a href="#" class="social-link" title="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+        <a href="#" class="social-link" title="YouTube"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg></a>
+        <a href="#" class="social-link" title="Instagram"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+      </div>
+      <div class="footer-copy">© 2026 PLURALS TECH · studios@plurals.tech</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})
+},{threshold:.07,rootMargin:'0px 0px -32px 0px'});
+document.querySelectorAll('.reveal').forEach((el,i)=>{
+  el.style.transitionDelay=`${(i%4)*.065}s`;
+  obs.observe(el);
+});
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{
+  const s=window.scrollY>60;
+  nav.style.padding=s?'12px 48px':'18px 48px';
+  nav.style.background=s?'rgba(6,6,15,0.98)':'rgba(6,6,15,0.90)';
+},{passive:true});
+</script>
+</body>
+</html>
